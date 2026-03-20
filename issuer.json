@@ -1,0 +1,10 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "Issuer",
+  "id": "https://TU_USUARIO.github.io/amfv-badges-pilot/issuer.json",
+  "name": "AMFV (Piloto)",
+  "url": "https://amfv.org",
+  "email": "contacto@amfv.org",
+  "description": "Emisor ficticio para piloto técnico de credenciales Open Badges.",
+  "image": "https://TU_USUARIO.github.io/amfv-badges-pilot/images/amfv-pilot-badge.png"
+}
