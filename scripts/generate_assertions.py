@@ -8,7 +8,7 @@ Replace HOST_BASE with your GitHub Pages URL.
 import csv, json, uuid, hashlib
 from datetime import datetime, timezone
 
-HOST_BASE = "https://TU_USUARIO.github.io/amfv-badges-pilot"
+HOST_BASE = "https://eleazar14.github.io/amfv-badges-pilot"
 ISSUER_ID = f"{HOST_BASE}/issuer.json"
 BADGECLASS_ID = f"{HOST_BASE}/badges/pv101.json"
 
