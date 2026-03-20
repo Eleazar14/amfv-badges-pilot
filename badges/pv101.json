@@ -1,14 +1,14 @@
 {
   "@context": "https://w3id.org/openbadges/v2",
   "type": "BadgeClass",
-  "id": "https://TU_USUARIO.github.io/amfv-badges-pilot/badges/pv101.json",
+  "id": "https://eleazar14.github.io/amfv-badges-pilot/badges/pv101.json",
   "name": "AMFV Piloto – PV 101 (Curso ficticio)",
   "description": "Badge de prueba emitido al completar el curso ficticio PV 101.",
-  "image": "https://TU_USUARIO.github.io/amfv-badges-pilot/images/amfv-pilot-badge.png",
+  "image": "https://eleazar14.github.io/amfv-badges-pilot/images/amfv-pilot-badge.png",
   "criteria": {
     "narrative": "Se otorga por completar el curso ficticio PV 101 y responder correctamente un mini‑quiz de cierre."
   },
-  "issuer": "https://TU_USUARIO.github.io/amfv-badges-pilot/issuer.json",
+  "issuer": "https://eleazar14.github.io/amfv-badges-pilot/issuer.json",
   "tags": [
     "pharmacovigilance",
     "drug safety",
