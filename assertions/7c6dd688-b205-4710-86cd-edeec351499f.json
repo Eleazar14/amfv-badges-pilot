@@ -1,0 +1,22 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "Assertion",
+  "id": "https://eleazar14.github.io/amfv-badges-pilot/assertions/7c6dd688-b205-4710-86cd-edeec351499f.json",
+  "recipient": {
+    "type": "email",
+    "hashed": true,
+    "salt": "411a928b9f504b35889d973ed347395c",
+    "identity": "sha256$c49d05ccae09ab3ae52a10fe49d4c97ce208f1d360573da0bec6a3612aade10b"
+  },
+  "issuedOn": "2026-03-18T00:00:00Z",
+  "badge": "https://eleazar14.github.io/amfv-badges-pilot/badges/pv101.json",
+  "verification": {
+    "type": "hosted"
+  },
+  "evidence": [
+    {
+      "id": "https://eleazar14.github.io/amfv-badges-pilot/evidence/pv101.html",
+      "narrative": "Evidencia ficticia: finalización de PV 101 y mini‑quiz."
+    }
+  ]
+}
