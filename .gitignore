@@ -1,0 +1,4 @@
+data/
+*.csv
+backup_prev/
+scripts/

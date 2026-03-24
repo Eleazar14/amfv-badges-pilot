@@ -1,0 +1,22 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "Assertion",
+  "id": "https://eleazar14.github.io/amfv-badges-pilot/assertions/2c0f7b8d-caf8-4dff-b0e1-717b81501e4b.json",
+  "recipient": {
+    "type": "email",
+    "hashed": true,
+    "salt": "dadb185ba4ed40538af1d23f4e18976a",
+    "identity": "sha256$a6d67ab93d3df89877cf39a63bd9a57c91839c9dcc3835b91e70cbc76b235f55"
+  },
+  "issuedOn": "2026-03-23T00:00:00Z",
+  "badge": "https://eleazar14.github.io/amfv-badges-pilot/badges/pv101.json",
+  "verification": {
+    "type": "hosted"
+  },
+  "evidence": [
+    {
+      "id": "https://eleazar14.github.io/amfv-badges-pilot/evidence/pv101.html",
+      "narrative": "Evidencia: finalización del curso y mini-quiz."
+    }
+  ]
+}
