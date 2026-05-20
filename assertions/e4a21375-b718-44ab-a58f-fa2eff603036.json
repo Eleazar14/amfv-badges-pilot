@@ -1,0 +1,22 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "Assertion",
+  "id": "https://eleazar14.github.io/amfv-badges-pilot/assertions/e4a21375-b718-44ab-a58f-fa2eff603036.json",
+  "recipient": {
+    "type": "email",
+    "hashed": true,
+    "salt": "6c09a642595742c0b58b19a48b906eda",
+    "identity": "sha256$2808cd6e1b6690ff18c8c9c01421c03eb92f5311db18c772c330673dd9e038b1"
+  },
+  "issuedOn": "2026-05-16T00:00:00Z",
+  "badge": "https://eleazar14.github.io/amfv-badges-pilot/badges/bpfv.json",
+  "verification": {
+    "type": "hosted"
+  },
+  "evidence": [
+    {
+      "id": "https://eleazar14.github.io/amfv-badges-pilot/evidence/bpfv.html",
+      "narrative": "Evidencia: participación validada por la Asociación Mexicana de Farmacovigilancia, A.C. conforme a los criterios definidos para el curso."
+    }
+  ]
+}

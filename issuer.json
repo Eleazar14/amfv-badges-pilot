@@ -2,9 +2,9 @@
   "@context": "https://w3id.org/openbadges/v2",
   "type": "Issuer",
   "id": "https://eleazar14.github.io/amfv-badges-pilot/issuer.json",
-  "name": "AMFV (Piloto)",
+  "name": "Asociación Mexicana de Farmacovigilancia, A.C.",
   "url": "https://amfv.org",
-  "email": "contacto@amfv.org",
-  "description": "Emisor ficticio para piloto técnico de credenciales Open Badges.",
-  "image": "https://eleazar14.github.io/amfv-badges-pilot/images/amfv-pilot-badge.png"
+  "email": "amfv2005@gmail.com",
+  "description": "Asociación civil mexicana enfocada en la profesionalización, formación continua e intercambio científico en farmacovigilancia.",
+  "image": "https://eleazar14.github.io/amfv-badges-pilot/images/bpfv-badge.png"
 }

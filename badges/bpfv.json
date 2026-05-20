@@ -1,0 +1,20 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "BadgeClass",
+  "id": "https://eleazar14.github.io/amfv-badges-pilot/badges/bpfv.json",
+  "name": "Cumplimiento de las Buenas Prácticas de Farmacovigilancia",
+  "description": "Constancia digital emitida por la Asociación Mexicana de Farmacovigilancia, A.C. por la participación en el curso “Cumplimiento de las Buenas Prácticas de Farmacovigilancia: el camino para auditorías e inspecciones exitosas”.",
+  "image": "https://eleazar14.github.io/amfv-badges-pilot/images/bpfv-badge.png",
+  "criteria": {
+    "narrative": "La persona participante cumplió los criterios definidos por la Asociación Mexicana de Farmacovigilancia, A.C. para la emisión de esta constancia digital, conforme al registro y validación interna del curso."
+  },
+  "issuer": "https://eleazar14.github.io/amfv-badges-pilot/issuer.json",
+  "tags": [
+    "farmacovigilancia",
+    "buenas practicas de farmacovigilancia",
+    "auditorias",
+    "inspecciones",
+    "AMFV",
+    "open badges"
+  ]
+}
