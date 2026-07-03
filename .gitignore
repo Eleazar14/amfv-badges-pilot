@@ -1,4 +1,4 @@
-data/
-*.csv
-backup_prev/
-scripts/
+data/attendees.csv
+data/output_mailmerge.csv
+*.xlsx
+~$*

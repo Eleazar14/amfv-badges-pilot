@@ -1,0 +1,22 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "Assertion",
+  "id": "https://eleazar14.github.io/amfv-badges-pilot/assertions/ia-fv-test-2026-06/978aea7d-3926-4a1b-acc9-b375744079d4.json",
+  "recipient": {
+    "type": "email",
+    "hashed": true,
+    "salt": "3cf84a2083bc477688578c37f89bcce9",
+    "identity": "sha256$192a9f847ca405203ba0011782dfe35214cea88279c4796c82f8db6784335d4a"
+  },
+  "issuedOn": "2026-06-20T00:00:00Z",
+  "badge": "https://eleazar14.github.io/amfv-badges-pilot/badges/ia-fv-test-2026-06.json",
+  "verification": {
+    "type": "hosted"
+  },
+  "evidence": [
+    {
+      "id": "https://eleazar14.github.io/amfv-badges-pilot/evidence/ia-fv-test-2026-06.html",
+      "narrative": "Evidencia de prueba personal para validar el flujo técnico de constancias digitales. No constituye una constancia oficial emitida por AMFV."
+    }
+  ]
+}

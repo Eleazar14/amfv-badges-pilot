@@ -1,0 +1,20 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "BadgeClass",
+  "id": "https://eleazar14.github.io/amfv-badges-pilot/badges/ia-fv-test-2026-06.json",
+  "name": "PRUEBA PERSONAL - IA aplicada en Farmacovigilancia: Casos prácticos e implementación",
+  "description": "Insignia de prueba personal creada por Eleazar para validar el flujo técnico de constancias digitales. No constituye una constancia oficial emitida por AMFV.",
+  "image": "https://eleazar14.github.io/amfv-badges-pilot/images/ia-fv-test-2026-06-badge.png",
+  "criteria": {
+    "id": "https://eleazar14.github.io/amfv-badges-pilot/evidence/ia-fv-test-2026-06.html",
+    "narrative": "Esta insignia se utiliza únicamente para una prueba personal del flujo técnico de credenciales digitales, incluyendo generación de páginas, assertions, enlaces de LinkedIn y envío por correo. No es una constancia oficial."
+  },
+  "issuer": "https://eleazar14.github.io/amfv-badges-pilot/issuer.json",
+  "tags": [
+    "prueba personal",
+    "farmacovigilancia",
+    "inteligencia artificial",
+    "open badges",
+    "no oficial"
+  ]
+}

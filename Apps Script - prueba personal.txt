@@ -1,0 +1,467 @@
+/*******************************************************
+ * PRUEBA PERSONAL ELEAZAR - Envío de constancia digital
+ *
+ * Hoja esperada:
+ *   IA_FV_TEST_mailmerge
+ *
+ * Columnas esperadas:
+ *   full_name, email, issued_on, credential_id,
+ *   credential_url, assertion_url, linkedin_add_url,
+ *   linkedin_share_url, evidence_url, certificate_url,
+ *   sent, sent_at, message_id
+ *
+ * Esta prueba NO constituye envío oficial AMFV.
+ *******************************************************/
+
+const SHEET_NAME = "IA_FV_TEST_mailmerge";
+const TEST_MODE = true;
+const TEST_EMAIL = "eleazar.co14@gmail.com";
+const MAX_SEND_PER_RUN = 1;
+
+const EMAIL_SUBJECT_REAL =
+  "[PRUEBA PERSONAL] Constancia digital de prueba";
+
+const EMAIL_SUBJECT_TEST =
+  "[PRUEBA PERSONAL] Constancia digital de prueba";
+
+const SENDER_NAME = "Prueba personal Eleazar";
+
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu("Prueba Constancias")
+    .addItem("1. Revisar configuración", "checkSheetSetup")
+    .addItem("2. Ver cuota de correo", "checkQuota")
+    .addItem("3. Previsualizar primera fila pendiente", "previewFirstPendingEmail")
+    .addItem("4. Enviar correo de prueba", "sendCredentialEmails")
+    .addToUi();
+}
+
+function sendCredentialEmails() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_NAME);
+
+  if (!sheet) {
+    throw new Error("No se encontró la pestaña: " + SHEET_NAME);
+  }
+
+  const data = sheet.getDataRange().getValues();
+
+  if (data.length < 2) {
+    throw new Error("La hoja no contiene filas de participantes.");
+  }
+
+  const headers = data[0].map(String);
+  const col = buildColumnMap(headers);
+
+  validateRequiredColumns(col);
+
+  let sentCount = 0;
+  let skippedCount = 0;
+
+  for (let r = 1; r < data.length; r++) {
+    const rowNumber = r + 1;
+    const row = data[r];
+
+    const fullName = getCell(row, col.full_name);
+    const participantEmail = getCell(row, col.email);
+    const issuedOn = getCell(row, col.issued_on);
+    const credentialId = getCell(row, col.credential_id);
+    const credentialUrl = getCell(row, col.credential_url);
+    const assertionUrl = getCell(row, col.assertion_url);
+    const linkedinAddUrl = getCell(row, col.linkedin_add_url);
+    const linkedinShareUrl = getCell(row, col.linkedin_share_url);
+    const evidenceUrl = getCell(row, col.evidence_url);
+    const certificateUrl = getCell(row, col.certificate_url);
+    const sentStatus = getCell(row, col.sent);
+
+    if (String(sentStatus).toUpperCase() === "YES") {
+      skippedCount++;
+      continue;
+    }
+
+    if (!fullName || !participantEmail || !credentialId || !credentialUrl || !certificateUrl) {
+      Logger.log("Fila " + rowNumber + " omitida por datos incompletos.");
+      skippedCount++;
+      continue;
+    }
+
+    const recipient = TEST_MODE ? TEST_EMAIL : participantEmail;
+    const subject = TEST_MODE ? EMAIL_SUBJECT_TEST : EMAIL_SUBJECT_REAL;
+
+    const htmlBody = buildHtmlEmail({
+      fullName: fullName,
+      participantEmail: participantEmail,
+      issuedOn: issuedOn,
+      credentialId: credentialId,
+      credentialUrl: credentialUrl,
+      assertionUrl: assertionUrl,
+      linkedinAddUrl: linkedinAddUrl,
+      linkedinShareUrl: linkedinShareUrl,
+      evidenceUrl: evidenceUrl,
+      certificateUrl: certificateUrl,
+      testMode: TEST_MODE
+    });
+
+    const plainBody = buildPlainTextEmail({
+      fullName: fullName,
+      participantEmail: participantEmail,
+      issuedOn: issuedOn,
+      credentialId: credentialId,
+      credentialUrl: credentialUrl,
+      assertionUrl: assertionUrl,
+      linkedinAddUrl: linkedinAddUrl,
+      linkedinShareUrl: linkedinShareUrl,
+      evidenceUrl: evidenceUrl,
+      certificateUrl: certificateUrl,
+      testMode: TEST_MODE
+    });
+
+    GmailApp.sendEmail(recipient, subject, plainBody, {
+      htmlBody: htmlBody,
+      name: SENDER_NAME
+    });
+
+    const now = new Date();
+    sheet.getRange(rowNumber, col.sent_at + 1).setValue(now);
+
+    if (TEST_MODE) {
+      sheet.getRange(rowNumber, col.message_id + 1).setValue("TEST_SENT_TO_" + TEST_EMAIL);
+    } else {
+      sheet.getRange(rowNumber, col.sent + 1).setValue("YES");
+      sheet.getRange(rowNumber, col.message_id + 1).setValue("SENT");
+    }
+
+    sentCount++;
+
+    if (sentCount >= MAX_SEND_PER_RUN) {
+      break;
+    }
+  }
+
+  const modeText = TEST_MODE ? "MODO PRUEBA" : "MODO REAL";
+
+  SpreadsheetApp.getUi().alert(
+    modeText +
+    "
+
+Correos enviados en esta ejecución: " + sentCount +
+    "
+Filas omitidas o ya enviadas: " + skippedCount +
+    "
+
+TEST_MODE actual: " + TEST_MODE
+  );
+}
+
+function previewFirstPendingEmail() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_NAME);
+
+  if (!sheet) {
+    throw new Error("No se encontró la pestaña: " + SHEET_NAME);
+  }
+
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0].map(String);
+  const col = buildColumnMap(headers);
+
+  validateRequiredColumns(col);
+
+  for (let r = 1; r < data.length; r++) {
+    const row = data[r];
+    const sentStatus = getCell(row, col.sent);
+
+    if (String(sentStatus).toUpperCase() === "YES") {
+      continue;
+    }
+
+    const fullName = getCell(row, col.full_name);
+    const participantEmail = getCell(row, col.email);
+    const credentialId = getCell(row, col.credential_id);
+    const credentialUrl = getCell(row, col.credential_url);
+    const certificateUrl = getCell(row, col.certificate_url);
+
+    const preview =
+      "Primera fila pendiente:
+
+" +
+      "Nombre: " + fullName + "
+" +
+      "Email real: " + participantEmail + "
+" +
+      "Credential ID: " + credentialId + "
+
+" +
+      "Credential URL:
+" + credentialUrl + "
+
+" +
+      "Certificate URL:
+" + certificateUrl + "
+
+" +
+      "TEST_MODE actual: " + TEST_MODE + "
+" +
+      "Destinatario si se ejecuta ahora: " + (TEST_MODE ? TEST_EMAIL : participantEmail);
+
+    SpreadsheetApp.getUi().alert(preview);
+    return;
+  }
+
+  SpreadsheetApp.getUi().alert("No hay filas pendientes por enviar.");
+}
+
+function checkSheetSetup() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_NAME);
+
+  if (!sheet) {
+    SpreadsheetApp.getUi().alert("ERROR: No se encontró la pestaña: " + SHEET_NAME);
+    return;
+  }
+
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0].map(String);
+  const col = buildColumnMap(headers);
+  const missing = getMissingRequiredColumns(col);
+
+  if (missing.length > 0) {
+    SpreadsheetApp.getUi().alert("ERROR: Faltan columnas requeridas:
+
+" + missing.join("
+"));
+    return;
+  }
+
+  let totalRows = 0;
+  let pendingRows = 0;
+  let sentRows = 0;
+  let incompleteRows = 0;
+
+  for (let r = 1; r < data.length; r++) {
+    const row = data[r];
+    const fullName = getCell(row, col.full_name);
+    const email = getCell(row, col.email);
+    const credentialUrl = getCell(row, col.credential_url);
+    const certificateUrl = getCell(row, col.certificate_url);
+    const sent = getCell(row, col.sent);
+
+    if (!fullName && !email && !credentialUrl && !certificateUrl) {
+      continue;
+    }
+
+    totalRows++;
+
+    if (String(sent).toUpperCase() === "YES") {
+      sentRows++;
+    } else {
+      pendingRows++;
+    }
+
+    if (!fullName || !email || !credentialUrl || !certificateUrl) {
+      incompleteRows++;
+    }
+  }
+
+  SpreadsheetApp.getUi().alert(
+    "Configuración revisada correctamente.
+
+" +
+    "Pestaña: " + SHEET_NAME + "
+" +
+    "TEST_MODE: " + TEST_MODE + "
+" +
+    "TEST_EMAIL: " + TEST_EMAIL + "
+
+" +
+    "Filas con datos: " + totalRows + "
+" +
+    "Pendientes: " + pendingRows + "
+" +
+    "Marcadas como enviadas: " + sentRows + "
+" +
+    "Filas incompletas: " + incompleteRows
+  );
+}
+
+function checkQuota() {
+  const remainingQuota = MailApp.getRemainingDailyQuota();
+  SpreadsheetApp.getUi().alert("Cuota restante de envío de correos para hoy:
+
+" + remainingQuota);
+}
+
+function buildHtmlEmail(data) {
+  const testBanner = data.testMode
+    ? '<div style="background:#fff3cd;border:1px solid #ffeeba;color:#856404;padding:12px 16px;border-radius:8px;margin-bottom:20px;"><strong>PRUEBA PERSONAL:</strong> Este correo es únicamente para validar el flujo técnico. No constituye una constancia oficial AMFV.</div>'
+    : '';
+
+  return `
+  <div style="font-family:Arial,Helvetica,sans-serif;background:#f4f6f9;padding:24px;color:#1f2937;">
+    <div style="max-width:720px;margin:0 auto;background:#ffffff;border-radius:16px;padding:28px;border:1px solid #e5e7eb;">
+
+      ${testBanner}
+
+      <p style="font-size:16px;">Hola <strong>${escapeHtml(data.fullName)}</strong>,</p>
+
+      <p style="font-size:16px;line-height:1.6;">
+        Este es un correo de <strong>prueba personal</strong> para validar el flujo técnico de constancias digitales.
+      </p>
+
+      <p style="font-size:16px;line-height:1.6;">
+        No constituye una constancia oficial emitida por AMFV.
+      </p>
+
+      <div style="margin:28px 0;">
+        <a href="${escapeHtml(data.credentialUrl)}"
+           style="display:inline-block;background:#0f2e6d;color:#ffffff;text-decoration:none;padding:13px 18px;border-radius:10px;font-weight:bold;margin:4px 6px 8px 0;">
+          Ver mi insignia digital de prueba
+        </a>
+
+        <a href="${escapeHtml(data.certificateUrl)}"
+           style="display:inline-block;background:#0b8fa5;color:#ffffff;text-decoration:none;padding:13px 18px;border-radius:10px;font-weight:bold;margin:4px 6px 8px 0;">
+          Descargar PDF de prueba
+        </a>
+      </div>
+
+      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:18px;margin:24px 0;">
+        <p style="margin-top:0;font-size:16px;"><strong>Opciones de prueba para LinkedIn</strong></p>
+        <p style="font-size:15px;line-height:1.6;">Puedes abrir estos enlaces para validar el flujo, pero no guardes la certificación en LinkedIn.</p>
+
+        <a href="${escapeHtml(data.linkedinAddUrl)}"
+           style="display:inline-block;border:1px solid #0f2e6d;color:#0f2e6d;text-decoration:none;padding:11px 15px;border-radius:10px;font-weight:bold;margin:4px 6px 8px 0;">
+          Probar agregar a LinkedIn
+        </a>
+
+        <a href="${escapeHtml(data.linkedinShareUrl)}"
+           style="display:inline-block;border:1px solid #0f2e6d;color:#0f2e6d;text-decoration:none;padding:11px 15px;border-radius:10px;font-weight:bold;margin:4px 6px 8px 0;">
+          Probar compartir en LinkedIn
+        </a>
+      </div>
+
+      <p style="font-size:15px;line-height:1.6;">
+        <strong>Credential ID:</strong><br>
+        <span style="font-family:Consolas,monospace;background:#f3f4f6;padding:6px 8px;border-radius:6px;display:inline-block;word-break:break-all;">
+          ${escapeHtml(data.credentialId)}
+        </span>
+      </p>
+
+      <p style="font-size:14px;line-height:1.6;color:#4b5563;">
+        <strong>Insignia digital de prueba:</strong><br>
+        <a href="${escapeHtml(data.credentialUrl)}">${escapeHtml(data.credentialUrl)}</a>
+      </p>
+
+      <p style="font-size:14px;line-height:1.6;color:#4b5563;">
+        <strong>PDF de prueba:</strong><br>
+        <a href="${escapeHtml(data.certificateUrl)}">${escapeHtml(data.certificateUrl)}</a>
+      </p>
+
+      <p style="font-size:14px;line-height:1.6;color:#4b5563;">
+        <strong>Assertion JSON:</strong><br>
+        <a href="${escapeHtml(data.assertionUrl)}">${escapeHtml(data.assertionUrl)}</a>
+      </p>
+
+      <div style="margin-top:28px;padding-top:18px;border-top:1px solid #e5e7eb;color:#374151;font-size:15px;line-height:1.6;">
+        <p>Prueba personal Eleazar</p>
+      </div>
+
+    </div>
+  </div>
+  `;
+}
+
+function buildPlainTextEmail(data) {
+  return "PRUEBA PERSONAL - No constituye constancia oficial AMFV
+
+" +
+    "Hola " + data.fullName + ",
+
+" +
+    "Este correo sirve para validar el flujo técnico de constancias digitales.
+
+" +
+    "Insignia digital de prueba:
+" + data.credentialUrl + "
+
+" +
+    "PDF de prueba:
+" + data.certificateUrl + "
+
+" +
+    "Agregar a LinkedIn:
+" + data.linkedinAddUrl + "
+
+" +
+    "Compartir en LinkedIn:
+" + data.linkedinShareUrl + "
+
+" +
+    "Assertion JSON:
+" + data.assertionUrl + "
+
+" +
+    "Credential ID:
+" + data.credentialId + "
+
+" +
+    "Prueba personal Eleazar";
+}
+
+function buildColumnMap(headers) {
+  const col = {};
+  headers.forEach(function(header, index) {
+    const key = String(header).trim();
+    col[key] = index;
+  });
+  return col;
+}
+
+function getMissingRequiredColumns(col) {
+  const required = [
+    "full_name",
+    "email",
+    "issued_on",
+    "credential_id",
+    "credential_url",
+    "assertion_url",
+    "linkedin_add_url",
+    "linkedin_share_url",
+    "evidence_url",
+    "certificate_url",
+    "sent",
+    "sent_at",
+    "message_id"
+  ];
+
+  const missing = [];
+  required.forEach(function(name) {
+    if (col[name] === undefined) {
+      missing.push(name);
+    }
+  });
+  return missing;
+}
+
+function validateRequiredColumns(col) {
+  const missing = getMissingRequiredColumns(col);
+  if (missing.length > 0) {
+    throw new Error("Faltan columnas requeridas:
+" + missing.join("
+"));
+  }
+}
+
+function getCell(row, index) {
+  if (index === undefined || index === null) {
+    return "";
+  }
+  return String(row[index] || "").trim();
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}

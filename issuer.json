@@ -2,9 +2,8 @@
   "@context": "https://w3id.org/openbadges/v2",
   "type": "Issuer",
   "id": "https://eleazar14.github.io/amfv-badges-pilot/issuer.json",
-  "name": "Asociación Mexicana de Farmacovigilancia, A.C.",
-  "url": "https://amfv.org",
-  "email": "amfv2005@gmail.com",
-  "description": "Asociación civil mexicana enfocada en la profesionalización, formación continua e intercambio científico en farmacovigilancia.",
-  "image": "https://eleazar14.github.io/amfv-badges-pilot/images/bpfv-badge.png"
+  "name": "Prueba personal Eleazar - No válida como constancia oficial",
+  "url": "https://eleazar14.github.io/amfv-badges-pilot/",
+  "email": "eleazar.co14@gmail.com",
+  "description": "Emisor técnico de prueba personal para validar el flujo de constancias digitales. No corresponde a una constancia oficial."
 }
